@@ -1,12 +1,21 @@
-FROM maven:3.9-eclipse-temurin-17
+FROM gradle:8.5-jdk17
 
-WORKDIR /jdbc-training
+WORKDIR /workspace
 
-# プロキシの設定ファイルをコピーする
-COPY settings.xml /root/.m2/settings.xml
+# locale を生成
+RUN apt-get update && \
+    apt-get install -y locales && \
+    sed -i 's/# ja_JP.UTF-8 UTF-8/ja_JP.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen ja_JP.UTF-8 && \
+    update-locale LANG=ja_JP.UTF-8
 
-# MavenのSSL検証を無効化
-ENV MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true"
+ENV LANG=ja_JP.UTF-8
+ENV LANGUAGE=ja_JP:ja
+ENV LC_ALL=ja_JP.UTF-8
 
-# ホストの./jdbc-training配下のファイル・フォルダを全てコンテナの/todo配下にコピーする
-COPY . .
+COPY build.gradle settings.gradle ./
+RUN gradle dependencies --no-daemon
+
+COPY src ./src
+
+CMD ["bash"]
