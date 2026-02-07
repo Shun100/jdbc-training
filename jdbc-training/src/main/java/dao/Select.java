@@ -47,8 +47,6 @@ public class Select extends AbstractDao {
           while (rs.next()) {
             System.out.println(rs.getString("product_name") + " " + rs.getString("product_category"));
           }
-        } catch (SQLException e) {
-          System.err.println(e);
         }
       
     } catch (SQLException e) {
