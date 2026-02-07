@@ -35,5 +35,6 @@ public class Main {
     // update
     Update update = new Update();
     update.execute("TCP/IPの全て", "network");
+    update.execute("Clean Architecture", "architecture");
   }
 }

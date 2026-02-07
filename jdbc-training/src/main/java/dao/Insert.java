@@ -32,6 +32,19 @@ public class Insert extends AbstractDao {
     }
   }
 
-  public void executeWithPreparedStatement(String productName, String category) {}
-
+  public void executeWithPreparedStatement(String productName, String category) {
+    String sql = new StringBuilder()
+      .append("INSERT INTO product ")
+      .append("(product_name, product_category) ")
+      .append("VALUES (?, ?)")
+      .toString();
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+        PreparedStatement pstmt = conn.prepareStatement(sql);) {
+          pstmt.setString(1, productName);
+          pstmt.setString(2, category);
+          int count = pstmt.executeUpdate(); // ResultSetを返すわけではないので、tryで囲わなくて良い
+    } catch (SQLException e) {
+      System.err.println(e);
+    }
+  }
 }
