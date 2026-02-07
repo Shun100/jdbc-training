@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -5,10 +9,10 @@ import java.sql.Statement;
 import java.sql.SQLException;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     String url = "jdbc:postgresql://host.docker.internal:5432/postgres?options=-c%20lc_messages=C";
     String user = "postgres";
-    String password = "xxxxxxxx";
+    String password = readPassword("password.properties");
 
     /**
      * 主なResultSetのデータ取得メソッド
@@ -27,6 +31,19 @@ public class Main {
       }
     } catch (SQLException e) {
       System.err.println(e);
+    }
+  }
+
+  public static String readPassword(String propertiesFile) throws IOException {
+    Properties properties = new Properties();
+
+    try (InputStream input = Main.class.getClassLoader().getResourceAsStream(propertiesFile)) {
+      if (input == null) {
+        throw new IOException(".propertiesファイルが存在しません");
+      }
+
+      properties.load(input);
+      return properties.getProperty("db.password");
     }
   }
 }
