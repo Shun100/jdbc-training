@@ -3,6 +3,7 @@ import java.io.IOException;
 import dao.Delete;
 import dao.Insert;
 import dao.Select;
+import dao.Transaction;
 import dao.Update;
 
 public class Main {
@@ -46,5 +47,9 @@ public class Main {
 
     // SQLインジェクションの例
     delete.execute("Deep Learning' OR '1' = '1", "book' OR '1' = '1"); // 全て削除される
+
+    // transaction
+    Transaction transaction = new Transaction();
+    transaction.execute();
   }
 }
