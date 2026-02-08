@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import dao.Delete;
 import dao.Insert;
 import dao.Select;
 import dao.Update;
@@ -26,15 +27,24 @@ public class Main {
     // insert
     Insert insert = new Insert();
     insert.execute("詳細LLM", "AI");
+    insert.executeWithPreparedStatement("Oracle Bronze", "Database");
 
     // select
     Select select = new Select();
-    select.execute("Deep Learning", "book");
+    select.execute("Deep Learning", "AI");
     select.executeWithPreparedStatement("ゼロから作るDeep Learning", "book");
 
     // update
     Update update = new Update();
     update.execute("TCP/IPの全て", "network");
-    update.execute("Clean Architecture", "architecture");
+    update.executeWithPreparedStatement("Clean Architecture", "architecture");
+
+    // delete
+    Delete delete = new Delete();
+    delete.execute("Deep Learning", "book");
+    delete.executeWithPreparedStatement("TCP/IPの全て", "network");
+
+    // SQLインジェクションの例
+    delete.execute("Deep Learning' OR '1' = '1", "book' OR '1' = '1"); // 全て削除される
   }
 }
